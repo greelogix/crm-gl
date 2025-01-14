@@ -12,7 +12,7 @@
 <div class="filters-container mb-3 d-flex gap-3 justify-content-end position-relative" style="top: 35px;">
         <input type="search" id="custom-search" class="form-control w-auto shadow-none" placeholder="Search">
 </div>
-<table id="customerTable" class="table table-bordered align-middle" style="width:100%">
+<table id="customerTable" class="table table-bordered align-middle w-100" >
     @php $weekNumber = 1; @endphp
     @foreach ($groupedByWeekConnects as $week => $connects)
           @if($groupedByWeekConnects->isEmpty())
@@ -20,8 +20,10 @@
                 <td colspan="7" class="text-center">No data found</td>
             </tr>
           @endif
-        <thead class="table-light">
+        
+        <thead class="table-active">
             <tr style="font-size: small; background-color: #f8f9fa;">
+                <th></th>
                 <th>Sr.</th>
                 <th>Name</th>
                 <th>Weak Date</th>
@@ -31,8 +33,10 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody>
+    <div class="toggle-row">
+        <tbody class="table-active">
             <tr style="font-size: small;" class="row-proposal toggle" data-bs-toggle="collapse" data-bs-target="#week-{{ Str::slug($week) }}" aria-expanded="false">
+                <td><i class="fa-sharp fa-solid fa-angle-down"></i></td>
                 <td>{{ $weekNumber++ }}</td>
                 <td>{{ Auth::user()->name }}</td>
                 <td>{{ $week }}</td>
@@ -51,9 +55,9 @@
                 </td>
             </tr>
         </tbody>
-
-        <tbody id="week-{{ Str::slug($week) }}" class="collapse" id="sow-toggle" >
+        <tbody id="week-{{ Str::slug($week) }}" class="collapse">
             <tr style="font-size: small; background-color: #f8f9fa;">
+                <th></th>
                 <th>Sr.</th>
                 <th>Name</th>
                 <th>Date</th>
@@ -64,6 +68,7 @@
             </tr>
             @foreach ($connects->groupBy('date') as $date => $dailyConnects)
                 <tr style="font-size: small;" class="row-proposal">
+                    <td></td>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ Auth::user()->name }}</td>
                     <td>{{ $date }}</td>
@@ -84,6 +89,7 @@
                 </tr>
             @endforeach
         </tbody>
+    </div>
     @endforeach    
 </table>
 
@@ -192,14 +198,12 @@
            
    });
 
-   $('.toggle').on('click', function(){
-    var target = $('#sow-toggle');
-    if (target.hasClass('show')) {
-        target.removeClass('show').addClass('hide');
-    } else {
-        target.removeClass('hide').addClass('show');
-    }
-});
+   $('.toggle').on('click', function() {
+        var target = $(this).data('bs-target'); 
+        $(target).collapse('toggle hide'); 
+    });
+
+
 
 
 });

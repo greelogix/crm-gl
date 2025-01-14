@@ -66,6 +66,7 @@
                     @csrf
                    @method('DELETE') 
                 </form>
+
                 <a href="{{ route('leads.show', $lead->id) }}" class="cursor-pointer ms-1 generate-lead" data-bs-toggle="tooltip" title="Generate Lead">
                     <i class="fa fa-plus-circle" style="font-size: medium;"></i>
                 </a>
@@ -284,7 +285,6 @@ $(document).ready(function() {
             $('.required').css('border', '');
             $('.required').removeClass('is-invalid');
     });
-
 });
 
 </script>

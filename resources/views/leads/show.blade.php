@@ -158,5 +158,12 @@ $(document).ready(function () {
             }
         });
     });
+
+        @if(Session::has('success-message'))
+            toastr.success("{{ Session::get('success-message') }}");
+        @endif
+        @if (session()->has('info-message'))
+            toastr.info("{{ Session::get('info-message') }}"); 
+       @endif
 });
 </script>

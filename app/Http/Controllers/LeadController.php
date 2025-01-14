@@ -75,20 +75,27 @@ class LeadController extends Controller
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        $leadUpdated = Lead::where('id', $id)->update([
+{
+    // Ensure the ID exists in the database
+    $lead = Lead::find($id);
+
+    if ($lead->status) {
+        session()->flash('info-message', 'Lead is already created!');
+    } else {
+        $leadUpdated = $lead->update([
             'status' => true,
             'date' => \Carbon\Carbon::now()->format('Y-m-d'),
         ]);
 
-        $showlead = Lead::with(['negotiationstatus.followUps'])->findOrFail($id);
-    
         if ($leadUpdated) {
-            session()->flash('success', 'Lead Created Successfully!');
+            session()->flash('success-message', 'Lead Created Successfully!');
         }
-
-        return view('leads.show', compact('showlead'));
     }
+    $showlead = Lead::with(['negotiationstatus.followUps'])->findOrFail($id);
+
+    return view('leads.show', compact('showlead'));
+}
+
     
 
     /**

@@ -67,6 +67,10 @@
         @if(Session::has('error'))
             toastr.error("{{ Session::get('error') }}");
         @endif
+        @if (session()->has('info'))
+        toastr.info("{{ Session::get('info') }}"); 
+       @endif
+       
     </script>
 </body>
 </html>
