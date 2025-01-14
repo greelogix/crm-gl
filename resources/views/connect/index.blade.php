@@ -40,10 +40,10 @@
                 <td>{{ $connects->sum('connects_buy') }}</td>
                 <td>
                     @php
-                    $weekLeads = $groupedByWeekLeads[$week] ?? collect();
+                        $weekLeads = $groupedByWeekLeads[$week] ?? collect();
                     @endphp
-                    {{ $weekLeads->sum('connects_spent') }}
-                </td>
+                    {{ $weekLeads->filter(fn($lead) => is_numeric($lead['connects_spent']))->sum('connects_spent') }}
+                </td>                
                 <td class="action-icons">
                     <button class="btn add-more-btn create-lead" data-bs-toggle="modal" data-bs-target="#LeadModal">
                         Add More
@@ -71,11 +71,13 @@
                     <td>{{ $dailyConnects->sum('connects_buy') }}</td>
                     <td>
                         @php
-                        $dailyLeads = $weekLeads->where('created_at', '>=', \Carbon\Carbon::parse($date)->startOfDay())
-                                                ->where('created_at', '<=', \Carbon\Carbon::parse($date)->endOfDay());
+                            $dailyLeads = $weekLeads->where('created_at', '>=', \Carbon\Carbon::parse($date)->startOfDay())
+                                                    ->where('created_at', '<=', \Carbon\Carbon::parse($date)->endOfDay());
+                    
+                            $dailyLeadsFiltered = $dailyLeads->filter(fn($lead) => is_numeric($lead['connects_spent']));
                         @endphp
-                        {{ $dailyLeads->sum('connects_spent') }}
-                    </td>
+                        {{ $dailyLeadsFiltered->sum('connects_spent') }}
+                    </td>                    
                     <td class="action-icons">
                         {{-- You can choose to show any buttons/actions here --}}
                     </td>

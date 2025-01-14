@@ -84,8 +84,7 @@ class LeadController extends Controller
         $showlead = Lead::with(['negotiationstatus.followUps'])->findOrFail($id);
     
         if ($leadUpdated) {
-            return view('leads.show', compact('showlead'))
-                ->with('success', 'Lead created successfully!');
+            session()->flash('success', 'Lead Created Successfully!');
         }
 
         return view('leads.show', compact('showlead'));
