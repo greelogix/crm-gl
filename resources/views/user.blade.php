@@ -59,6 +59,8 @@ $(document).ready(function() {
         lengthChange: true,
         ordering: true
     });
+    
+    $('#customerTable_length select').removeClass('form-select form-select-sm');
 
     $('#custom-search').on('keyup', function () {
         table.search(this.value).draw();
