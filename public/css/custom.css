@@ -1,0 +1,204 @@
+#customer-table_filter,#customer-table_paginate{
+    text-align: end;
+    position: relative;
+    bottom: 25px;
+}
+#customer-table_next,#customer-table_previous{
+    display: none
+}
+#customer-table_paginate{
+    padding-top: 15px;
+    position: relative;
+    bottom: 36px;
+    left: 20px;
+    text-decoration: none;
+}
+#customer-table_paginate a{
+    text-decoration: none;
+    padding: 9px;
+    padding-left: 23px;
+    padding-right: 23px;
+}
+#customer-table_next a{
+    margin-right: 0px; 
+}
+#customer-table_info{
+    margin-top: 15px;
+}
+#customerTable_filter{
+    display: none;
+}
+
+.dataTables_length {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-customer{
+    padding: 6px 10px 6px 12px;
+    font-size: 15px;
+}
+
+#customerTable_length{
+    position: relative;
+    bottom: 15px;
+}
+#customerTable_length label , .footer-text{
+    font-family: sans-serif;
+    font-size: smaller;
+    font-weight: 400;
+}
+#customerTable_previous a , #customerTable_next a{
+    font-size: smaller;
+    padding: 5px;
+}
+#customerTable_paginate{
+    position: absolute;
+    font-size: smaller;
+}
+#customerTable {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+#customerTable th, #customerTable td {
+    border: 1px solid #e0e0e0;
+    border: none; 
+}
+#customerTable td{
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0 !important;
+}
+
+#customerTable_info{
+    font-family: sans-serif;
+    font-size: small;
+    font-weight: 500;
+    margin-top: 8px;
+}
+
+body {
+    background-color: #f9f9fb;
+}
+.btn-purple {
+    background-color: #7f56d9;
+    color: white;
+}
+.btn-purple:hover {
+    background-color: #7f56d9;
+}
+
+.status-pill {
+    color: white;
+    background-color: #4caf50;
+    border-radius: 12px;
+    padding: 3px 10px;
+    font-size: 0.85rem;
+    font-size: smaller;
+}
+
+.add-more-btn {
+    color: #7f56d9;
+    background-color: white;
+    border: 1px solid #d6d6d6;
+    border-radius: 8px;
+    padding: 7px 11px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.add-more-btn:hover {
+    background-color: #7f56d9; 
+    color: white;
+    border-color: #c0c0c0;
+    cursor: pointer;
+}
+
+.status-pend {
+    color: white;
+    background-color: #bd4833;
+    border-radius: 12px;
+    padding: 3px 10px;
+    font-size: 0.85rem;
+    font-size: smaller;
+}
+
+.paginate_button.page-item.active a{
+    background: #6c63ff;
+    border: none; 
+    border-radius: 10px;
+    font-size: smaller;
+}
+.text-lead{
+    color: #6c63ff;
+}
+
+.paginate_button.page-item a{
+    background: white;
+    border: none; 
+    border-radius: 10px;
+    font-size: smaller;
+}
+.row-proposal:hover{
+    background: #6c63ff !important;
+}
+.btn-link{
+    text-decoration: none;
+    border: 1px solid lightgrey;
+    background: white;
+    color: black;
+    font-size: smaller;
+    font-family: sans-serif;
+}
+.btn-link:hover{
+    text-decoration: none;
+    border: 1px solid lightgrey;
+    background: white;
+    color: black;
+    font-size: smaller;
+    font-family: sans-serif;
+}
+.add-cuctomer:hover{
+       color: white;
+       background: #6c63ff;
+}
+
+.paginate_button.page-item.active:hover {
+    background: transparent;
+    border: none;
+}
+.paginate_button.page-item:hover {
+    background: #6c63ff;
+    border: none;
+}
+
+.paginate_button.page-item:hover {
+    background: white;
+}
+
+.paginate_button.page-item.active .page-link {
+    color: white;
+    text-decoration: none;
+}
+.action-icons i {
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-right: 8px;
+}
+.dataTables_wrapper .dataTables_paginate {
+    display: flex;
+    justify-content: center;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    color: #6c63ff !important;
+    border: none;
+    background: transparent;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: #6c63ff !important;
+    color: white !important;
+    border-radius: 4px;
+}

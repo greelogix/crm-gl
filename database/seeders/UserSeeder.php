@@ -17,6 +17,7 @@ class UserSeeder extends Seeder
        DB::table('users')->insert([
         'name' => 'Muhammad Muzammal',
         'email' => 'm.muzammal@greelogix.com',
+        'role' => 'admin',
         'password' => Hash::make('admin123'),
     ]);
     }

@@ -48,7 +48,7 @@
                                           <input 
                                               type="text" 
                                               id="signup-name" 
-                                              class="form-control required @error('name') is-invalid @enderror" 
+                                              class="form-control required shadow-none @error('name') is-invalid @enderror" 
                                               name="name" 
                                               placeholder="Full Name" 
                                               value="{{ old('name') }}"
@@ -65,7 +65,7 @@
                                           <input 
                                               type="email" 
                                               id="signup-email" 
-                                              class="form-control required @error('email') is-invalid @enderror" 
+                                              class="form-control required shadow-none @error('email') is-invalid @enderror" 
                                               name="email" 
                                               placeholder="Email Address" 
                                               value="{{ old('email') }}"
@@ -82,7 +82,7 @@
                                           <input 
                                               type="password" 
                                               id="signup-password" 
-                                              class="form-control required @error('password') is-invalid @enderror" 
+                                              class="form-control required shadow-none @error('password') is-invalid @enderror" 
                                               name="password" 
                                               placeholder="Password"
                                           />
@@ -98,7 +98,7 @@
                                           <input 
                                               type="password" 
                                               id="confirm-password" 
-                                              class="form-control required @error('password_confirmation') is-invalid @enderror" 
+                                              class="form-control required shadow-none @error('password_confirmation') is-invalid @enderror" 
                                               name="password_confirmation" 
                                               placeholder="Confirm Password"
                                           />
@@ -110,7 +110,7 @@
                                       </div>
                                   
                                       <div class="text-center pt-1 mb-5 pb-1">
-                                          <button type="submit" class="btn btn-primary btn-block gradient-custom-2 mb-3">Sign up</button>
+                                          <button type="submit" class="btn btn-primary btn-block gradient-custom-2 mb-3 shadow-none">Sign up</button>
                                           <div>
                                               <a id="switch-to-login" href="{{route('login')}}">Login</a>
                                           </div>

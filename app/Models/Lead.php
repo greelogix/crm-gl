@@ -8,7 +8,7 @@ class Lead extends Model
 {
     protected $fillable = [
         'user_id','client_name', 'tech_stack', 'connects_spent', 'proposal_name',
-        'proposal_link', 'country', 'proposal_date','rate_type','rate_value',
+        'proposal_link', 'country', 'proposal_date','rate_type','rate_value','status','date',
     ];
 
     public function negotiationstatus()

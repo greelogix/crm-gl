@@ -15,20 +15,21 @@ class NegotiationController extends Controller
     public function store(Request $request)
     {
         $user_id = Auth::id();
+       
         $request->validate([
             'lead_id' => 'required',
             'negotiation_status' => 'required',
         ]);
-
+       
         $negotiation = NegotiationStatus::updateOrCreate(
             ['user_id' => $user_id, 'lead_id' => $request->lead_id],
             [
                 'negotiation_status' => $request->negotiation_status,
                 'negotiation_sub_status' => null,
-                'status_updated_at' => now(),
+                'updated_at' => now(),
             ]
         );
-        return redirect()->back()->with('negotiation', $negotiation);
+        return redirect()->back()->with('success', 'Successfully Update!');
     }
 
     public function updateSubStatus(Request $request)
@@ -44,15 +45,16 @@ class NegotiationController extends Controller
             ->first();
 
         if (!$negotiation) {
-            return response()->json(['error' => 'Negotiation status not found'], 404);
+            return redirect()->back()->with('error', 'Negotiation status not found', 404);
+            // return response()->json(['error' => 'Negotiation status not found'], 404);
         }
 
         $negotiation->update([
             'negotiation_sub_status' => $request->negotiation_sub_status,
-            'status_updated_at' => now(),
+            'updated_at' => now(),
         ]);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Successfully Update!');
     }
 
     public function markAsRead($id)

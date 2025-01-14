@@ -49,7 +49,7 @@
                                             <input 
                                                 type="email" 
                                                 id="form2Example11" 
-                                                class="form-control required @error('email') is-invalid @enderror"
+                                                class="form-control required shadow-none @error('email') is-invalid @enderror"
                                                 name="email" 
                                                 value="{{ old('email') }}" 
                                                 placeholder="Phone number or email address" 
@@ -65,7 +65,7 @@
                                             <input 
                                                 type="password" 
                                                 id="form2Example22" 
-                                                class="form-control required @error('password') is-invalid @enderror"
+                                                class="form-control required shadow-none @error('password') is-invalid @enderror"
                                                 name="password"
                                                 placeholder="Password" 
                                             />
@@ -76,7 +76,7 @@
                                             @enderror
                                         </div>
                                         <div class="text-center pt-1 mb-5 pb-1">
-                                            <button type="submit" class="btn btn-primary btn-block gradient-custom-2 mb-3">Log in</button>
+                                            <button type="submit" class="btn btn-primary btn-block gradient-custom-2 mb-3 shadow-none">Log in</button>
                                             <div>
                                                 <a id="switch-to-signup" href="{{route('signup')}}">Signup</a>
                                             </div>

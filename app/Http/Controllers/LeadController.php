@@ -22,12 +22,36 @@ class LeadController extends Controller
     {
 
     }
-    public function index()
+    public function index(Request $request)
     {
-       $userid = Auth::id();
-        $leads = Lead::where('user_id', $userid)->get();
+        $user = Auth::user();
+        $filter = $request->input('status_lead');
+        if ($user->role === 'admin') {
+            $leadsQuery = Lead::query();
+        } else {
+            $leadsQuery = Lead::where('user_id', $user->id);
+        }
+    
+        if ($filter == 1) {
+            $leadsQuery->where('status', 1);
+        }
+    
+        // if ($request->start_date) {
+        //     $startDate = Carbon::parse($request->start_date)->startOfDay();
+        //     $leadsQuery->where('created_at', '>=', $startDate);
+        // }
+    
+        // if ($request->end_date) {
+        //     $endDate = Carbon::parse($request->end_date)->endOfDay();
+        //     $leadsQuery->where('created_at', '<=', $endDate);
+        // }
+    
+        $leads = $leadsQuery->orderBy('id', 'desc')->get();
+        
         return view('leads.index', compact('leads'));
     }
+    
+
 
     /**
      * Show the form for creating a new resource.
@@ -43,7 +67,7 @@ class LeadController extends Controller
     public function store(LeadRequest $request)
      {
         Lead::create($request->validated());
-        return redirect()->route('leads.index')->with('success', 'Lead Created successfully!');;
+        return redirect()->route('leads.index')->with('success', 'Proposal created successfully!');
     }
         
 
@@ -52,10 +76,21 @@ class LeadController extends Controller
      */
     public function show(string $id)
     {
-        // $showlead = Lead::with('negotiation_status')->findOrFail($id);
+        $leadUpdated = Lead::where('id', $id)->update([
+            'status' => true,
+            'date' => \Carbon\Carbon::now()->format('Y-m-d'),
+        ]);
+
         $showlead = Lead::with(['negotiationstatus.followUps'])->findOrFail($id);
+    
+        if ($leadUpdated) {
+            return view('leads.show', compact('showlead'))
+                ->with('success', 'Lead created successfully!');
+        }
+
         return view('leads.show', compact('showlead'));
     }
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -78,7 +113,7 @@ class LeadController extends Controller
 
     $lead = Lead::findOrFail($id);
     $lead->update($validatedData);
-    return redirect()->route('leads.index')->with('success', 'Lead updated successfully');
+    return redirect()->route('leads.index')->with('success', 'Proposal updated successfully');
 }
 
     /**
@@ -88,6 +123,6 @@ class LeadController extends Controller
     {
         $lead = Lead::findOrFail($id);
         $lead->delete();
-        return redirect()->route('leads.index')->with('success', 'Lead deleted successfully');
+        return redirect()->route('leads.index')->with('success', 'Proposal deleted successfully');
     } 
 }

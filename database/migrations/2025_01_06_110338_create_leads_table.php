@@ -21,8 +21,10 @@ return new class extends Migration
             $table->string('proposal_link');
             $table->string('country');
             $table->date('proposal_date');
+            $table->string('status')->default(false);
             $table->string('rate_type');
             $table->float('rate_value');
+            $table->date('date')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

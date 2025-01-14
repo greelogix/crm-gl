@@ -3,94 +3,111 @@
 $user = Auth::user();
 @endphp
 <header>
-    <nav class="bg-gray-800 p-4 flex justify-between items-center">
-        <a href="" class="text-white text-start text-2xl font-bold hover:text-yellow-400 transition-colors no-underline">
-            Dashboard
-        </a>
-        <div class="text-end">
-            <img src="{{ Storage::url( $user->image ?? 'image/default-profile.jpg') }}" class="rounded-lg border rounded-circle" alt="" style=" position:absolute; right: 140px; top: 24px; height: 35px; width: 35px;">
-            <button class="dropdown-toggle text-white" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                {{  $user->name }}
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item cursor-pointer" data-bs-toggle="modal" data-bs-target="#profileModal">Profile</a></li>
-                <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
-            </ul>
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <div style="position: relative; left: 40px;">
+            <h5>Dashboard</h5>
         </div>
-    </nav>
+        <div class="d-flex align-items-center">
+            <img src="{{ $user->image ? Storage::url($user->image) : asset('logo/default-profile.jpg') }}" 
+                 class="rounded-circle border" 
+                 alt="Profile Image" 
+                 style="height: 35px; width: 35px; margin-right: 10px;">
+            <div class="dropdown">
+                <button class="dropdown-toggle text-black" 
+                        id="dropdownMenuButton1" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false" 
+                        style="border: none; background: none;">
+                    {{ $user->name }}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item cursor-pointer" data-bs-toggle="modal" data-bs-target="#profileModal">Profile</a></li>
+                    {{-- <li><a class="dropdown-item" href="{{ route('connect') }}">Connects</a></li> --}}
+                    <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </header>
+
 
 
 <!-- Modal -->
 <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content rounded-lg shadow-lg">
-            <div class="modal-header bg-blue-500 text-white rounded-t-lg">
-                <h5 class="modal-title" id="exampleModalLabel">Profile</h5>
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content shadow-lg border-0">
+            <!-- Modal Header -->
+            <div class="modal-header btn-purple  text-white">
+                <h5 class="modal-title ms-4 fw-bold" id="profileModalLabel">Profile</h5>
                 <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div class="flex space-x-4">
-                    <!-- Profile details side -->
-                    <div class=" p-4 bg-gray-50 rounded-lg shadow-sm">
-                        <h6 class="text-xl font-semibold mb-4">Profile Details</h6>
-                        <img src="{{ Storage::url( $user->image ?? 'image/default-profile.jpg') }}" id="preview" alt="Profile Image" class="w-full h-48 object-cover mb-4 rounded-lg border rounded-circle w-100"  style="width: 90%;">
-                        <p><strong class="font-medium">Name:</strong>{{ $user->name}}</p>
-                        <p><strong class="font-medium">Email:</strong>{{ $user->email}}</p>
+
+            <!-- Modal Body -->
+            <div class="modal-body bg-light">
+                <div class="row">
+                    <!-- Profile Details Section -->
+                    <div class="col-md-4 p-4 text-center bg-white rounded shadow-sm">
+                        <h6 class="fw-bold mb-4" style="color: #7f56d9;">Profile Details</h6>
+                        <img src="{{ $user->image ? Storage::url($user->image) : asset('logo/default-profile.jpg') }}" id="preview" alt="Profile Image" class="img-fluid rounded-circle border mb-3 shadow" style="width: 150px; height: 150px;">
+                        <p class="mb-2"><strong>Name:</strong> <span class="text-muted">{{ $user->name }}</span></p>
+                        <p><strong>Email:</strong> <span class="text-muted">{{ $user->email }}</span></p>
                     </div>
-                    
-                    <!-- Edit Profile side -->
-                    <div class="flex-1 p-4 bg-gray-50 rounded-lg shadow-sm">
-                        <div class="d-flex justify-content-between">
-                            <h6 class="text-xl font-semibold mb-4">Edit Profile</h6>
-                            <i class="fa-solid fa-pen-to-square cursor-pointer" data-toggle="tooltip" data-placement="top" title="Click here to edit your profile" id="edit-icon"></i>
+
+                    <!-- Edit Profile Section -->
+                    <div class="col-md-8 p-4 bg-white rounded shadow-sm">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold" style="color: #7f56d9;">Edit Profile</h6>
+                            <i class="fa-solid fa-pen-to-square text-primary cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Click here to edit your profile" id="edit-icon"></i>
                         </div>
-                        <form action="{{ route('profile.update', [ $user->id]) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('profile.update', [ $user->id]) }}" method="POST" enctype="multipart/form-data" class="needs-validation">
                             @csrf
-                            <div class="mb-4">
-                                <label for="name" class="block text-sm font-medium">Name</label>
-                                <input type="text" class="form-control mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg" id="name" name="name" @error('name') is-invalid @enderror value="{{ old('name',  $user->name) }}" readonly>
+                            <!-- Name Field -->
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control shadow-sm" id="name" name="name" value="{{ old('name', $user->name) }}" readonly>
                                 @error('name')
-                                <span class="text-danger">
-                                            {{$message}}
-                                        </span>
+                                <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="mb-4">
-                                <label for="email" class="block text-sm font-medium">Email</label>
-                                <input type="email" class="form-control mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg" id="email" name="email" @error('email') is-invalid @enderror value="{{ old('email',  $user->email) }}" readonly>
+                            
+                            <!-- Email Field -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control shadow-sm" id="email" name="email" value="{{ old('email', $user->email) }}" readonly>
                                 @error('email')
-                                <span class="text-danger">
-                                            {{$message}}
-                                        </span>
+                                <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="mb-4">
-                                <label for="image" class="block text-sm font-medium">Profile Image</label>
-                                <input type="file" class="form-control mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg" @error('image') is-invalid @enderror  id="image" name="image" readonly>
+                            
+                            <!-- Profile Image Upload -->
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Profile Image</label>
+                                <input type="file" class="form-control shadow-sm" id="image" name="image" readonly>
                                 @error('image')
-                                <span class="text-danger">
-                                            {{$message}}
-                                        </span>
+                                <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="mb-4">
-                                <label for="password" class="block text-sm font-medium">Password</label>
-                                <input type="password" class="form-control mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg" id="password" name="password" @error('password') is-invalid @enderror value="{{ old('password')}}" readonly>
+                            
+                            <!-- Password Field -->
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control shadow-sm" id="password" name="password" value="{{ old('password') }}" readonly>
                                 @error('password')
-                                <span class="text-danger">
-                                            {{$message}}
-                                        </span>
+                                <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <button type="submit" id="updatebtn" class="w-1/4 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300 mx-auto block d-none">Update</button>
-                        </form> 
+                            
+                            <!-- Update Button -->
+                            <button type="submit" id="updatebtn" class="btn btn-purple d-none"  style="font-size: small;">Update</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -116,4 +133,3 @@ $user = Auth::user();
     });
 });
 </script>
-

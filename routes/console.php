@@ -14,7 +14,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 
-Schedule::command(CheckNegotiationStatus::class)->everyTenSeconds();
+Schedule::command(CheckNegotiationStatus::class)->everyTwoHours();
 
 
 // Schedule::call(function(){
