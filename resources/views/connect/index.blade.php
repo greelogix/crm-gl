@@ -36,7 +36,7 @@
                 <td>{{ $weekNumber++ }}</td>
                 <td>{{ Auth::user()->name }}</td>
                 <td>{{ $week }}</td>
-                <td>{{ $connects->sum('price') }}</td>
+                <td>${{ $connects->sum('price') }}</td>
                 <td>{{ $connects->sum('connects_buy') }}</td>
                 <td>
                     @php
@@ -67,7 +67,7 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ Auth::user()->name }}</td>
                     <td>{{ $date }}</td>
-                    <td>{{ $dailyConnects->sum('price') }}</td>
+                    <td>${{ $dailyConnects->sum('price') }}</td>
                     <td>{{ $dailyConnects->sum('connects_buy') }}</td>
                     <td>
                         @php
