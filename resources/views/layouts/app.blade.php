@@ -23,23 +23,20 @@
     </header>
         <div class="row">
             <div class="col-2">
-            <!-- Sidebar -->
-            @include('layouts.sidebar')
-                        </div>
-                    <div class="col-10">
-            <!-- Main Content -->
-            <main class="container">
-                @yield('content')
-            </main>
-        </div>
+                <!-- Sidebar -->
+                @include('layouts.sidebar')
+                            </div>
+                        <div class="col-10">
+                <!-- Main Content -->
+                <main class="container">
+                    @yield('content')
+                </main>
+            </div>
         </div>
    
-
-   
-
     <!-- Footer -->
     <footer class="bg-light py-3 text-center footer-text">
-        <p class="mb-0">&copy; {{ date('Y') }} Your Company Name. All rights reserved.</p>
+        <p class="mb-0">&copy; {{ date('Y') }} Greelogix Company. All rights reserved.</p>
     </footer>
 
     <!-- Scripts -->

@@ -1,30 +1,49 @@
 @extends('layouts.app')
 
 @section('content')
-<div class=" mb-3 d-flex justify-content-between position-relative" style="top: 35px;">
+<div class="mb-2 mt-5 d-flex justify-content-between position-relative">
     <div class="">
         <h5 class="" style="font-size: large;">Customer List</h5>
     </div>
     <div>
-        <button class="btn btn-purple add-cuctomer create-lead shadow-none"  data-bs-toggle="modal" data-bs-target="#LeadModal" style="font-size: small;">Create Customer</button>
+        <button class="btn btn-purple add-cuctomer create-lead shadow-none"  data-bs-toggle="modal" data-bs-target="#LeadModal" style="font-size: small;">Add Propsoal</button>
     </div>
 </div>
-<div class="filters-container mb-3 d-flex gap-3 justify-content-end position-relative" style="top: 35px;">
-        {{-- <select class="form-select w-auto shadow-none">
-            <option selected>Jan 6 – Jan 13</option>
-            <input type="date" name="start_date" />
-            <input type="date" name="end_date" />
-        </select> --}}
-        <form method="GET" action="{{ route('leads.index') }}">
-            @csrf
-            <select name="status_lead" class="form-select w-auto shadow-none" onchange="this.form.submit()">
-                <option value="">Select</option>
-                <option value="1" {{ request('status_lead') == '1' ? 'selected' : '' }}>Leads</option>
-            </select>
-        </form>        
-        <input type="search" id="custom-search" class="form-control w-auto shadow-none" placeholder="Search">
-        <button class="btn btn-light shadow-none"><i class="bi bi-funnel"></i></button>
+<div class="container d-flex justify-content-end gap-2 p-2 bg-light position-relative" style="top: 20px;">
+    <form method="GET" action="{{ route('leads.index') }}" id="filterForm" class="d-flex gap-2">
+        @csrf
+        <input 
+        type="date" 
+        name="start_date" id="start_date"
+        value="{{ request('start_date') }}" 
+        class="form-control form-control-sm shadow-none" 
+        onchange="document.getElementById('filterForm').submit();">
+        <input 
+            type="date" 
+            name="end_date" id="end_date"
+            value="{{ request('end_date') }}" 
+            class="form-control form-control-sm shadow-none" 
+            onchange="document.getElementById('filterForm').submit();">    
+        <select 
+            name="status_lead" 
+            class="form-select form-select-sm shadow-none" 
+            onchange="document.getElementById('filterForm').submit();">
+            <option value="">Select</option>
+            <option value="0">All</option>
+            <option value="1" {{ request('status_lead') == '1' ? 'selected' : '' }}>Leads</option>
+        </select>
+    </form>
+    <input 
+        type="search" 
+        id="custom-search" 
+        class="form-control form-control-sm" 
+        placeholder="Search" style="width: 200px">
+    <!-- Filter Button -->
+    <button class="btn btn-sm btn-outline-primary shadow-none">
+        <i class="bi bi-funnel"></i>
+    </button>
 </div>
+
 <table id="customerTable" class="table table-bordered align-middle" style="width:100%">
     <thead class="table-light">
         <tr style="font-size: small;">
@@ -41,7 +60,7 @@
     </thead>
     <tbody>
         @foreach ($leads as $index=>$lead)
-        <tr style="font-size: small; " class="row-proposal cursor-pointer" data-lead-id="{{ $lead->id }}" data-bs-toggle="tooltip" title="Click hire to Create Lead">
+        <tr style="font-size: small; " class="row-proposal cursor-pointer {{$lead->status==1 ? 'table-secondary' : ''}}" data-lead-id="{{ $lead->id }}" data-bs-toggle="tooltip" title="Click hire to Create Lead">
             {{-- <td> --}}
                 {{-- <input type="checkbox" class="select-checkbox" data-lead-id="{{ $lead->id }}" data-bs-toggle="tooltip" title="Check Create Lead"> --}}
                 <a href="{{ route('leads.show', $lead->id) }}" class="checked-link-{{ $lead->id }}" style="display:none;"></a>
@@ -50,7 +69,7 @@
             <td>{{$lead->client_name}}</td>
             <td>{{ $lead->tech_stack }}</td>
             <td>{{ $lead->connects_spent }}</td>
-            <td>{!! $lead->status == 1 ? '<span class="status-pill">Complete</span>' : '<span class="status-pend">Pending</span>' !!}</td>
+            <td>{{ $lead->negotiationstatus->negotiation_status ?? 'N\A' }}</td>
             <td>{{ $lead->proposal_name }}</td>
             <td>{{ $lead->country }}</td>
             <td class="action-icons">
@@ -59,7 +78,7 @@
                 </a>
 
                 <a href="{{ route('leads.edit', $lead->id) }}" class="cursor-pointer ms-1 edit-lead" data-bs-toggle="modal" data-bs-target="#LeadModal" data-id="{{ $lead->id }}" data-bs-toggle="tooltip" title="Edit">
-                    <i class="fa fa-pencil" style="font-size: medium;"></i>
+                    <i class="fa fa-pencil" style="font-size: small;"></i>
                 </a>
 
                 <form id="delete-form-{{ $lead->id }}" action="{{ route('leads.destroy', $lead->id) }}" method="POST" style="display: none;">
@@ -68,8 +87,13 @@
                 </form>
 
                 <a href="{{ route('leads.show', $lead->id) }}" class="cursor-pointer ms-1 generate-lead" data-bs-toggle="tooltip" title="Generate Lead">
-                    <i class="fa fa-plus-circle" style="font-size: medium;"></i>
+                    @if ($lead->status == 0)
+                        <i class="fa fa-plus-circle" style="font-size: small;"></i>
+                    @else
+                        <i class="fa-solid fa-eye" style="font-size: small;"></i>
+                    @endif
                 </a>
+                
             </td>
         </tr>
         @endforeach
@@ -169,7 +193,7 @@
                     </div>
                 </div>
                 <div class="text-end">
-                    <button type="submit" id="btn-submit" class="btn btn-purple btn-block shadow-none" style="font-size: small;">Create Lead</button>
+                    <button type="submit" id="btn-submit" class="btn btn-purple btn-block shadow-none" style="font-size: small;">Create Propsoal</button>
                 </div>
             </form>
             
@@ -241,7 +265,7 @@ $(document).ready(function() {
 
     $('body').on('click', '.create-lead', function(){
         $('#LeadModalLabel').text('Create Proposal'); 
-        $('#btn-submit').text('Create Lead');
+        $('#btn-submit').text('Submit');
         $('.rate-input').hide();
         $('#leadForm')[0].reset();
     });
@@ -271,7 +295,7 @@ $(document).ready(function() {
                 $('#leadForm').attr('action', '/leads/' + leadId); 
                 $('#leadForm').append('<input type="hidden" name="_method" value="PUT">'); 
                 $('#LeadModalLabel').text('Update Proposal'); 
-                $('#btn-submit').text('Update Lead');
+                $('#btn-submit').text('Submit');
                 $('#leadModal').modal('show');
             },
             error: function(xhr, status, error) {
@@ -285,8 +309,18 @@ $(document).ready(function() {
             $('.required').css('border', '');
             $('.required').removeClass('is-invalid');
     });
-});
 
+   $('select[name="status_lead"]').change(function() {
+            var statusLead = $(this).val();
+            var startDate = $('#start_date');
+            var endDate = $('#end_date');
+            if (statusLead == '0') {
+                startDate.val('');
+                endDate.val('');
+            }
+            $('#filterForm').submit();
+        });
+});
 </script>
 @endpush
 

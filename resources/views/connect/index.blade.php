@@ -13,33 +13,34 @@
         <input type="search" id="custom-search" class="form-control w-auto shadow-none" placeholder="Search">
 </div>
 <table id="customerTable" class="table table-bordered align-middle w-100" >
+    <thead class="table-active">
+        <tr style="font-size: small; background-color: #f8f9fa;">
+            <th></th>
+            <th>Sr.</th>
+            <th>Name</th>
+            <th>Weak Date</th>
+            <th>Total Price</th>
+            <th>Total Connects</th>
+            <th>Total Use Connects</th>
+            <th>Action</th>
+        </tr>
+    </thead>
     @php $weekNumber = 1; @endphp
-    @foreach ($groupedByWeekConnects as $week => $connects)
-          @if($groupedByWeekConnects->isEmpty())
-            <tr>
-                <td colspan="7" class="text-center">No data found</td>
-            </tr>
-          @endif
-        
-        <thead class="table-active">
-            <tr style="font-size: small; background-color: #f8f9fa;">
-                <th></th>
-                <th>Sr.</th>
-                <th>Name</th>
-                <th>Weak Date</th>
-                <th>Total Price</th>
-                <th>Total Connects</th>
-                <th>Total Use Connects</th>
-                <th>Action</th>
-            </tr>
-        </thead>
+
+    
     <div class="toggle-row">
-        <tbody class="table-active">
-            <tr style="font-size: small;" class="row-proposal toggle" data-bs-toggle="collapse" data-bs-target="#week-{{ Str::slug($week) }}" aria-expanded="false">
+        <tbody class="table-active" id="accordionExample">
+            @foreach ($groupedByWeekConnects as $week => $connects)
+            @if($groupedByWeekConnects->isEmpty())
+              <tr>
+                  <td colspan="7" class="text-center">No data found</td>
+              </tr>
+            @endif
+            <tr style="font-size: small;" class="row-proposal collapsed" data-bs-toggle="collapse" data-bs-target="#collapseweek-{{ Str::slug($week) }}" aria-expanded="false" aria-controls="collapseweek-{{ Str::slug($week) }}">
                 <td><i class="fa-sharp fa-solid fa-angle-down"></i></td>
                 <td>{{ $weekNumber++ }}</td>
                 <td>{{ Auth::user()->name }}</td>
-                <td>{{ $week }}</td>
+                <td>{{ $week }}</td>    
                 <td>${{ $connects->sum('price') }}</td>
                 <td>{{ $connects->sum('connects_buy') }}</td>
                 <td>
@@ -53,44 +54,44 @@
                         Add More
                     </button>
                 </td>
+                <tbody id="collapseweek-{{ Str::slug($week) }}" class="collapse"  data-bs-parent="#accordionExample">
+                    <tr style="font-size: small; background-color: #f8f9fa;">
+                        <th></th>
+                        <th>Sr.</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Price</th>
+                        <th>Connects</th>
+                        <th>Connects Use</th>
+                        <th>Action</th>
+                    </tr>
+                    @foreach ($connects->groupBy('date') as $date => $dailyConnects)
+                        <tr style="font-size: small;" class="row-proposal">
+                            <td></td>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ Auth::user()->name }}</td>
+                            <td>{{ $date }}</td>
+                            <td>${{ $dailyConnects->sum('price') }}</td>
+                            <td>{{ $dailyConnects->sum('connects_buy') }}</td>
+                            <td>
+                                @php
+                                    $dailyLeads = $weekLeads->where('created_at', '>=', \Carbon\Carbon::parse($date)->startOfDay())
+                                                            ->where('created_at', '<=', \Carbon\Carbon::parse($date)->endOfDay());
+                            
+                                    $dailyLeadsFiltered = $dailyLeads->filter(fn($lead) => is_numeric($lead['connects_spent']));
+                                @endphp
+                                {{ $dailyLeadsFiltered->sum('connects_spent') }}
+                            </td>                    
+                            <td class="action-icons">
+                                {{-- You can choose to show any buttons/actions here --}}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
             </tr>
-        </tbody>
-        <tbody id="week-{{ Str::slug($week) }}" class="collapse">
-            <tr style="font-size: small; background-color: #f8f9fa;">
-                <th></th>
-                <th>Sr.</th>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Price</th>
-                <th>Connects</th>
-                <th>Connects Use</th>
-                <th>Action</th>
-            </tr>
-            @foreach ($connects->groupBy('date') as $date => $dailyConnects)
-                <tr style="font-size: small;" class="row-proposal">
-                    <td></td>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ Auth::user()->name }}</td>
-                    <td>{{ $date }}</td>
-                    <td>${{ $dailyConnects->sum('price') }}</td>
-                    <td>{{ $dailyConnects->sum('connects_buy') }}</td>
-                    <td>
-                        @php
-                            $dailyLeads = $weekLeads->where('created_at', '>=', \Carbon\Carbon::parse($date)->startOfDay())
-                                                    ->where('created_at', '<=', \Carbon\Carbon::parse($date)->endOfDay());
-                    
-                            $dailyLeadsFiltered = $dailyLeads->filter(fn($lead) => is_numeric($lead['connects_spent']));
-                        @endphp
-                        {{ $dailyLeadsFiltered->sum('connects_spent') }}
-                    </td>                    
-                    <td class="action-icons">
-                        {{-- You can choose to show any buttons/actions here --}}
-                    </td>
-                </tr>
             @endforeach
         </tbody>
     </div>
-    @endforeach    
 </table>
 
 
@@ -202,10 +203,6 @@
         var target = $(this).data('bs-target'); 
         $(target).collapse('toggle hide'); 
     });
-
-
-
-
 });
 </script>
 @endpush

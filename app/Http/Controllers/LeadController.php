@@ -27,27 +27,27 @@ class LeadController extends Controller
         $user = Auth::user();
         $filter = $request->input('status_lead');
         if ($user->role === 'admin') {
-            $leadsQuery = Lead::query();
+            $leadsQuery = Lead::with('negotiationstatus');
         } else {
-            $leadsQuery = Lead::where('user_id', $user->id);
+            $leadsQuery = Lead::with('negotiationstatus')->where('user_id', $user->id);
         }
     
         if ($filter == 1) {
             $leadsQuery->where('status', 1);
         }
     
-        // if ($request->start_date) {
-        //     $startDate = Carbon::parse($request->start_date)->startOfDay();
-        //     $leadsQuery->where('created_at', '>=', $startDate);
-        // }
+        if ($request->start_date) {
+            $startDate = Carbon::parse($request->start_date)->startOfDay();
+            $leadsQuery->where('created_at', '>=', $startDate);
+        }
     
-        // if ($request->end_date) {
-        //     $endDate = Carbon::parse($request->end_date)->endOfDay();
-        //     $leadsQuery->where('created_at', '<=', $endDate);
-        // }
+        if ($request->end_date) {
+            $endDate = Carbon::parse($request->end_date)->endOfDay();
+            $leadsQuery->where('created_at', '<=', $endDate);
+        }
     
         $leads = $leadsQuery->orderBy('id', 'desc')->get();
-        
+            
         return view('leads.index', compact('leads'));
     }
     
@@ -76,12 +76,9 @@ class LeadController extends Controller
      */
     public function show(string $id)
 {
-    // Ensure the ID exists in the database
     $lead = Lead::find($id);
 
-    if ($lead->status) {
-        session()->flash('info-message', 'Lead is already created!');
-    } else {
+    if ($lead->status == 0) {
         $leadUpdated = $lead->update([
             'status' => true,
             'date' => \Carbon\Carbon::now()->format('Y-m-d'),
@@ -91,6 +88,7 @@ class LeadController extends Controller
             session()->flash('success-message', 'Lead Created Successfully!');
         }
     }
+
     $showlead = Lead::with(['negotiationstatus.followUps'])->findOrFail($id);
 
     return view('leads.show', compact('showlead'));
