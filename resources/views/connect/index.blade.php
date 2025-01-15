@@ -27,20 +27,20 @@
     </thead>
     @php $weekNumber = 1; @endphp
 
-    
+
     <div class="toggle-row">
-        <tbody class="table-active" id="accordionExample">
-            @foreach ($groupedByWeekConnects as $week => $connects)
+        <tbody class="" id="accordionExample">
             @if($groupedByWeekConnects->isEmpty())
-              <tr>
-                  <td colspan="7" class="text-center">No data found</td>
-              </tr>
+                <tr>
+                    <td colspan="7" class="text-center">No data found</td>
+                </tr>
             @endif
-            <tr style="font-size: small;" class="row-proposal collapsed" data-bs-toggle="collapse" data-bs-target="#collapseweek-{{ Str::slug($week) }}" aria-expanded="false" aria-controls="collapseweek-{{ Str::slug($week) }}">
+            @foreach ($groupedByWeekConnects as $week => $connects)
+            <tr style="font-size: small;" class="row-proposal toggle-row table-active" data-toggle="collapseweek-{{ Str::slug($week) }}">
                 <td><i class="fa-sharp fa-solid fa-angle-down"></i></td>
                 <td>{{ $weekNumber++ }}</td>
                 <td>{{ Auth::user()->name }}</td>
-                <td>{{ $week }}</td>    
+                <td>{{ $week }}</td>
                 <td>${{ $connects->sum('price') }}</td>
                 <td>{{ $connects->sum('connects_buy') }}</td>
                 <td>
@@ -48,13 +48,13 @@
                         $weekLeads = $groupedByWeekLeads[$week] ?? collect();
                     @endphp
                     {{ $weekLeads->filter(fn($lead) => is_numeric($lead['connects_spent']))->sum('connects_spent') }}
-                </td>                
+                </td>
                 <td class="action-icons">
                     <button class="btn add-more-btn create-lead" data-bs-toggle="modal" data-bs-target="#LeadModal">
                         Add More
                     </button>
                 </td>
-                <tbody id="collapseweek-{{ Str::slug($week) }}" class="collapse"  data-bs-parent="#accordionExample">
+                <tbody id="collapseweek-{{ Str::slug($week) }}" class="collapse">
                     <tr style="font-size: small; background-color: #f8f9fa;">
                         <th></th>
                         <th>Sr.</th>
@@ -77,11 +77,11 @@
                                 @php
                                     $dailyLeads = $weekLeads->where('created_at', '>=', \Carbon\Carbon::parse($date)->startOfDay())
                                                             ->where('created_at', '<=', \Carbon\Carbon::parse($date)->endOfDay());
-                            
+
                                     $dailyLeadsFiltered = $dailyLeads->filter(fn($lead) => is_numeric($lead['connects_spent']));
                                 @endphp
                                 {{ $dailyLeadsFiltered->sum('connects_spent') }}
-                            </td>                    
+                            </td>
                             <td class="action-icons">
                                 {{-- You can choose to show any buttons/actions here --}}
                             </td>
@@ -106,7 +106,7 @@
         <div class="modal-body">
             <div class="card" style="border: none;">
                 <div class="card-body">
-                    <form id="connectform" action="{{ route('connect.store') }}" method="POST"> 
+                    <form id="connectform" action="{{ route('connect.store') }}" method="POST">
                         @csrf
                         <div class="row mb-3">
                             <div class="col-md-6">
@@ -124,7 +124,7 @@
                                 @enderror
                             </div>
                         </div>
-                    
+
                         <div class="row mb-3">
                             <div class="form-group col-md-6">
                                 <label for="price" style="font-size: small;">Price</label>
@@ -176,7 +176,7 @@
                 $(this).css('border', '1px solid red');
                 isValid = false;
             } else {
-                $(this).css('border', ''); 
+                $(this).css('border', '');
             }
         });
 
@@ -196,14 +196,18 @@
             $('#connectform')[0].reset();
             $('.required').css('border', '');
             $('.required').removeClass('is-invalid');
-           
+
    });
 
-   $('.toggle').on('click', function() {
-        var target = $(this).data('bs-target'); 
-        $(target).collapse('toggle hide'); 
+    //toggle child rows
+   $('.toggle-row').on('click', function(e) {
+        e.preventDefault();
+         var collapseID = $(this).data('toggle');
+         var collapseEle = $(`#${collapseID}`);
+         collapseEle.toggle()
     });
 });
+
 </script>
 @endpush
 
