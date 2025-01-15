@@ -12,13 +12,13 @@
 <div class="container d-flex justify-content-end gap-2 p-2 bg-light position-relative" style="top: 20px;">
     <form method="GET" action="{{ route('leads.index') }}" id="filterForm" class="d-flex gap-2">
         @csrf
-        <input 
+        <span style="position: absolute;bottom: 35px;font-size: smaller;">Start date</span> <input 
         type="date" 
         name="start_date" id="start_date"
         value="{{ request('start_date') }}" 
         class="form-control form-control-sm shadow-none" 
         onchange="document.getElementById('filterForm').submit();">
-        <input 
+        <span style="    position: absolute;right: 428px;bottom: 35px;font-size: smaller;">End date</span> <input 
             type="date" 
             name="end_date" id="end_date"
             value="{{ request('end_date') }}" 
