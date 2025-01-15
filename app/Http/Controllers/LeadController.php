@@ -36,18 +36,22 @@ class LeadController extends Controller
             $leadsQuery->where('status', 1);
         }
     
-        if ($request->start_date) {
+        if ($request->start_date && $request->end_date) {
             $startDate = Carbon::parse($request->start_date)->startOfDay();
-            $leadsQuery->where('created_at', '>=', $startDate);
-        }
-    
-        if ($request->end_date) {
             $endDate = Carbon::parse($request->end_date)->endOfDay();
-            $leadsQuery->where('created_at', '<=', $endDate);
-        }
+            $leadsQuery->whereBetween('created_at', [$startDate, $endDate]);
+        } 
+        // elseif ($request->start_date) {
+        //     $startDate = Carbon::parse($request->start_date)->startOfDay();
+        //     $leadsQuery->where('created_at', '>=', $startDate);
+        // } elseif ($request->end_date) {
+        //     $endDate = Carbon::parse($request->end_date)->endOfDay();
+        //     $leadsQuery->where('created_at', '<=', $endDate);
+        // }
+        
     
         $leads = $leadsQuery->orderBy('id', 'desc')->get();
-            
+
         return view('leads.index', compact('leads'));
     }
     
