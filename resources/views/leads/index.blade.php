@@ -72,7 +72,7 @@
             <td>{{ $lead->negotiationstatus->negotiation_status ?? 'N\A' }}</td>
             <td>{{ $lead->proposal_name }}</td>
             <td>{{ $lead->country }}</td>
-            <td class="action-icons">
+            <td class="action-icons" style="white-space: nowrap;">
                 <a href="{{ route('leads.destroy', $lead->id) }}" data-bs-toggle="tooltip" title="Delete" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $lead->id }}').submit();">
                     <i class="fa-regular fa-trash-can" style="font-size: medium;"></i>
                 </a>
