@@ -14,4 +14,9 @@ class Connect extends Model
         'price',
         'connects_buy',
     ];
+
+     public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
