@@ -68,7 +68,7 @@
             {{-- </td> --}}
             <td>{{ $index+1}}</td>
             <td>{{$lead->client_name}}</td>
-              <td>{{$lead->user->name}}</td>
+            <td style="white-space: nowrap;">{{$lead->user->name}}</td>
             <td>{{ $lead->tech_stack }}</td>
             <td>{{ $lead->connects_spent }}</td>
             <td>{{ $lead->negotiationstatus->negotiation_status ?? 'N\A' }}</td>
