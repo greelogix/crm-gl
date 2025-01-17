@@ -14,7 +14,7 @@ class ConnectController extends Controller
     {
         $user = Auth::user();
         if($user->role === 'admin'){
-            $connects = Connect::orderBy('date', 'asc')->get();
+            $connects = Connect::with('user')->orderBy('date', 'asc')->get();
             $leads = Lead::where('status', '1')->get();
         }else{
             $connects = Connect::where('user_id', $user->id)->orderBy('date', 'asc')->get();
