@@ -68,7 +68,7 @@
                         <tr style="font-size: small;" class="row-proposal">
                             <td></td>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ Auth::user()->name }}</td>
+                            <td>{{ $dailyConnects->first()->user->name ?? 'N/A' }}</td>
                             <td>{{ $date }}</td>
                             <td>${{ $dailyConnects->sum('price') }}</td>
                             <td>{{ $dailyConnects->sum('connects_buy') }}</td>
