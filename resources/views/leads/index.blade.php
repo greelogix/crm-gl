@@ -9,7 +9,7 @@
         <button class="btn btn-purple add-cuctomer create-lead shadow-none"  data-bs-toggle="modal" data-bs-target="#LeadModal" style="font-size: small;">Add Propsoal</button>
     </div>
 </div>
-<div class="container d-flex justify-content-end gap-2 p-2 bg-light position-relative" style="top: 20px;">
+<div class="container d-flex justify-content-end perposal-main gap-2 p-2 bg-light position-relative" style="top: 20px;">
     <form method="GET" action="{{ route('leads.index') }}" id="filterForm" class="d-flex gap-2">
         @csrf
         <span style="position: absolute;bottom: 35px;font-size: smaller;">Start date</span> <input 
