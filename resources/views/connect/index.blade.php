@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -26,8 +27,6 @@
         </tr>
     </thead>
     @php $weekNumber = 1; @endphp
-
-
     <div class="toggle-row">
         <tbody class="" id="accordionExample">
             @if($groupedByWeekConnects->isEmpty())
@@ -37,7 +36,7 @@
             @endif
             @foreach ($groupedByWeekConnects as $week => $connects)
             <tr style="font-size: small;" class="row-proposal toggle-row table-active" data-toggle="collapseweek-{{ Str::slug($week) }}">
-                <td><i class="fa-sharp fa-solid fa-angle-down"></i></td>
+                <td class="up-arrow"><i class="fa-sharp fa-solid fa-angle-down"></i></td>
                 <td>{{ $weekNumber++ }}</td>
                 <td>{{ Auth::user()->name }}</td>
                 <td>{{ $week }}</td>
@@ -199,18 +198,16 @@
 
    });
 
-    //toggle child rows
-   $('.toggle-row').on('click', function(e) {
-        e.preventDefault();
-         var collapseID = $(this).data('toggle');
-         var collapseEle = $(`#${collapseID}`);
-         const icon = $this.find('i');
-         collapseEle.toggle();
-         icon.toggleClass('fa-angle-down fa-angle-up');
-    });
+   $('.toggle-row').on('click', function (e) {
+    e.preventDefault();
+    const $this = $(this);
+    const collapseEle = $(`#${$this.data('toggle')}`);
+    const icon = $this.find('i');
+    collapseEle.toggle();
+    icon.toggleClass('fa-angle-down fa-angle-up');
+  });
+
 });
 
 </script>
 @endpush
-
-
