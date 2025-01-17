@@ -202,3 +202,17 @@ body {
     color: white !important;
     border-radius: 4px;
 }
+@media (max-width: 768px) {
+    .perposal-main{
+        top: -9px !important;
+    }
+    .sidebar-crm li{
+        position: relative;
+        right: 15px;
+        font-size: small;
+    }
+    #customerTable_length{
+        position: relative;
+        top: 0px;
+    }
+}
