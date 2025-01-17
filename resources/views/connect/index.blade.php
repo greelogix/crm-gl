@@ -64,19 +64,25 @@
                         <th>Connects Use</th>
                         <th>Action</th>
                     </tr>
-                    @foreach ($connects->groupBy('date') as $date => $dailyConnects)
+                   @foreach ($connects->groupBy('date') as $date => $dailyConnects)
+                    @php
+                        $dailyConnectsByUser = $dailyConnects->groupBy('user_id');
+                    @endphp
+                
+                    @foreach ($dailyConnectsByUser as $userId => $userConnects)
                         <tr style="font-size: small;" class="row-proposal">
                             <td></td>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $dailyConnects->first()->user->name ?? 'N/A' }}</td>
+                            <td>{{ $loop->parent->iteration }}</td>
+                            <td>{{ $userConnects->first()->user->name ?? 'N/A' }}</td>
                             <td>{{ $date }}</td>
-                            <td>${{ $dailyConnects->sum('price') }}</td>
-                            <td>{{ $dailyConnects->sum('connects_buy') }}</td>
+                            <td>${{ $userConnects->sum('price') }}</td>
+                            <td>{{ $userConnects->sum('connects_buy') }}</td>
                             <td>
                                 @php
                                     $dailyLeads = $weekLeads->where('created_at', '>=', \Carbon\Carbon::parse($date)->startOfDay())
-                                                            ->where('created_at', '<=', \Carbon\Carbon::parse($date)->endOfDay());
-
+                                                            ->where('created_at', '<=', \Carbon\Carbon::parse($date)->endOfDay())
+                                                            ->where('user_id', $userId);
+                
                                     $dailyLeadsFiltered = $dailyLeads->filter(fn($lead) => is_numeric($lead['connects_spent']));
                                 @endphp
                                 {{ $dailyLeadsFiltered->sum('connects_spent') }}
@@ -86,6 +92,8 @@
                             </td>
                         </tr>
                     @endforeach
+                @endforeach
+                
                 </tbody>
             </tr>
             @endforeach
