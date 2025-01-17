@@ -22,11 +22,11 @@
             @include('layouts.header')
     </header>
         <div class="row">
-            <div class="col-2">
+            <div class="col-1 col-md-2">
                 <!-- Sidebar -->
                 @include('layouts.sidebar')
-                            </div>
-                        <div class="col-10">
+            </div>
+            <div class="col-11 col-md-10 main-containt">
                 <!-- Main Content -->
                 <main class="container">
                     @yield('content')
