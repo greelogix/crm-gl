@@ -204,7 +204,9 @@
         e.preventDefault();
          var collapseID = $(this).data('toggle');
          var collapseEle = $(`#${collapseID}`);
-         collapseEle.toggle()
+         const icon = $this.find('i');
+         collapseEle.toggle();
+         icon.toggleClass('fa-angle-down fa-angle-up');
     });
 });
 
