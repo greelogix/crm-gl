@@ -50,6 +50,7 @@
             {{-- <th><input type="checkbox" id="select-all"></th> --}}
             <th >#</th>
             <th>Client Name</th>
+             <th>User Name</th>
             <th>Tech Stack</th>
             <th>Connects Spent</th>
             <th>Status</th>
@@ -67,6 +68,7 @@
             {{-- </td> --}}
             <td>{{ $index+1}}</td>
             <td>{{$lead->client_name}}</td>
+              <td>{{$lead->user->name}}</td>
             <td>{{ $lead->tech_stack }}</td>
             <td>{{ $lead->connects_spent }}</td>
             <td>{{ $lead->negotiationstatus->negotiation_status ?? 'N\A' }}</td>
