@@ -27,7 +27,7 @@ class LeadController extends Controller
         $user = Auth::user();
         $filter = $request->input('status_lead');
         if ($user->role === 'admin') {
-            $leadsQuery = Lead::with('negotiationstatus');
+            $leadsQuery = Lead::with('negotiationstatus','user');
         } else {
             $leadsQuery = Lead::with('negotiationstatus')->where('user_id', $user->id);
         }
