@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-2 mt-5 d-flex justify-content-between position-relative">
+<div class="mb-2 mt-5 mt-sm-3 mb-sm-4  d-flex justify-content-between position-relative">
     <div class="">
         <h5 class="" style="font-size: large;">Customer List</h5>
     </div>
