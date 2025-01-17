@@ -29,11 +29,6 @@
     @php $weekNumber = 1; @endphp
     <div class="toggle-row">
         <tbody class="" id="accordionExample">
-            @if($groupedByWeekConnects->isEmpty())
-                <tr>
-                    <td colspan="7" class="text-center">No data found</td>
-                </tr>
-            @endif
             @foreach ($groupedByWeekConnects as $week => $connects)
             <tr style="font-size: small;" class="row-proposal toggle-row table-active" data-toggle="collapseweek-{{ Str::slug($week) }}">
                 <td class="up-arrow"><i class="fa-sharp fa-solid fa-angle-down"></i></td>
@@ -68,7 +63,7 @@
                     @php
                         $dailyConnectsByUser = $dailyConnects->groupBy('user_id');
                     @endphp
-                
+
                     @foreach ($dailyConnectsByUser as $userId => $userConnects)
                         <tr style="font-size: small;" class="row-proposal">
                             <td></td>
@@ -82,7 +77,7 @@
                                     $dailyLeads = $weekLeads->where('created_at', '>=', \Carbon\Carbon::parse($date)->startOfDay())
                                                             ->where('created_at', '<=', \Carbon\Carbon::parse($date)->endOfDay())
                                                             ->where('user_id', $userId);
-                
+
                                     $dailyLeadsFiltered = $dailyLeads->filter(fn($lead) => is_numeric($lead['connects_spent']));
                                 @endphp
                                 {{ $dailyLeadsFiltered->sum('connects_spent') }}
@@ -93,7 +88,7 @@
                         </tr>
                     @endforeach
                 @endforeach
-                
+
                 </tbody>
             </tr>
             @endforeach
