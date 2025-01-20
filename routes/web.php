@@ -27,8 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/negotiation/store', [NegotiationController::class, 'store'])->name('negotiation.store');
     Route::post('/negotiation/update-sub-status', [NegotiationController::class, 'updateSubStatus'])->name('negotiation.updateSubStatus');
     Route::put('/follow-up/{id}/mark-read', [NegotiationController::class, 'markAsRead']);
-    Route::get('/connect', [ConnectController::class, 'index'])->name('connect');
-    Route::post('/connect/store', [ConnectController::class, 'store'])->name('connect.store');    
+    Route::resource('connect', ConnectController::class);    
 
 });
 
