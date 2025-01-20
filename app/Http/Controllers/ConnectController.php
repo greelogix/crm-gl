@@ -16,24 +16,39 @@ class ConnectController extends Controller
         if($user->role === 'admin'){
             $connects = Connect::with('user')->orderBy('date', 'asc')->get();
             $leads = Lead::where('status', '1')->get();
-        }else{
+        } else {
             $connects = Connect::where('user_id', $user->id)->orderBy('date', 'asc')->get();
             $leads = Lead::where('user_id', $user->id)->where('status', '1')->get();
         }
-
+    
         $groupedByWeekConnects = $connects->groupBy(function ($item) {
             return \Carbon\Carbon::parse($item->date)->startOfWeek()->format('Y-m-d') . ' - ' . \Carbon\Carbon::parse($item->date)->endOfWeek()->format('Y-m-d');
         });
-    
+
         $groupedByWeekLeads = $leads->groupBy(function ($item) {
             return \Carbon\Carbon::parse($item->date)->startOfWeek()->format('Y-m-d') . ' - ' . \Carbon\Carbon::parse($item->date)->endOfWeek()->format('Y-m-d');
         });
         
+        $weeklyData = [];
+        $carryForward = 0;
     
-        return view('connect.index', compact('groupedByWeekConnects', 'groupedByWeekLeads' ,'connects'));
-    }
-    
+        foreach ($groupedByWeekConnects as $week => $connects) {
+            $totalBuy = $connects->sum('connects_buy');
+            $totalSpent = isset($groupedByWeekLeads[$week]) ? $groupedByWeekLeads[$week]->filter(fn($lead) => is_numeric($lead['connects_spent']))->sum('connects_spent'): 0;
 
+            $remainingConnects = $totalBuy - $totalSpent + $carryForward;
+
+            $weeklyData[$week] = [
+                'total_buy' => $totalBuy,
+                'total_spent' => $totalSpent,
+                'carry_forward' => $remainingConnects > 0 ? $remainingConnects : 0,
+            ];
+
+            $carryForward = $weeklyData[$week]['carry_forward'];
+        }
+
+        return view('connect.index', compact('groupedByWeekConnects', 'groupedByWeekLeads', 'connects' ,'weeklyData'));
+    }
 
     public function store(Request $request){
       
@@ -50,6 +65,38 @@ class ConnectController extends Controller
             'price' => $validatedData['price'],
             'connects_buy' => $validatedData['connects_buy'],
         ]);
-        return redirect()->route('connect')->with('success', 'Connect added successfully.');
+        return redirect()->route('connect.index')->with('success', 'Connect added successfully.');
     }
+     
+    public function edit(string $id)
+    {
+        $editconnect = Connect::findOrFail($id);
+        return response()->json([
+            'success' => true,
+            'connect' => $editconnect
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        $validatedData = $request->validate([
+            'date' => 'required|date',
+            'price' => 'required|numeric',
+            'connects_buy' => 'required|integer',
+        ]);
+
+    $connect = Connect::findOrFail($id);
+    $connect->update($validatedData);
+    return redirect()->route('connect.index')->with('success', 'Connect updated successfully');
+    }
+
+    public function destroy(string $id)
+    {
+        $connect = Connect::findOrFail($id);
+        $connect->delete();
+        return redirect()->route('connect.index')->with('success', 'Connect deleted successfully');
+    } 
 }
