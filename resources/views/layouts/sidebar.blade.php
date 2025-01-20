@@ -14,7 +14,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('connect') }}" class="d-block px-4 py-2 rounded text-white text-decoration-none hover-bg-dark hover-text-primary d-flex align-items-center">
+                <a href="{{ route('connect.index') }}" class="d-block px-4 py-2 rounded text-white text-decoration-none hover-bg-dark hover-text-primary d-flex align-items-center">
                     <i class="fas fa-link me-3"></i> 
                     <span class="sidebar-text"> Connects</span> 
                 </a>
