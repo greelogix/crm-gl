@@ -20,31 +20,45 @@ class CheckNegotiationStatus extends Command
     public function handle()
     {
         $negotiations = NegotiationStatus::with(['user', 'lead'])
-        ->whereNull('negotiation_sub_status')
-        ->where('updated_at', '<=', now()->subDay(2))
-        ->get();
+            ->whereNull('negotiation_sub_status')
+            ->where('updated_at', '<=', now()->subDay(2))
+            ->get();
 
-        if ($negotiations->isNotEmpty()) {
-            foreach ($negotiations as $negotiation) {
-                $user = $negotiation->user;
+        foreach ($negotiations as $negotiation) {
+            if (in_array($negotiation->negotiation_sub_status, ['Won', 'Loss'])) {
+                continue;
+            }
+
+            $user = $negotiation->user;
+            $lastFollowUp = FollowUp::where('negotiation_status_id', $negotiation->id)
+                ->latest('created_at')
+                ->first();
+
+            $followUpCount = ($lastFollowUp && ($lastFollowUp->negotiation_status === $negotiation->negotiation_status && $lastFollowUp->negotiation_sub_status === $negotiation->negotiation_sub_status))
+                ? FollowUp::where('negotiation_status_id', $negotiation->id)
+                    ->where('negotiation_status', $negotiation->negotiation_status)
+                    ->count()
+                : 0;
+
+            if ($followUpCount < 7) {
                 Mail::to($user->email)->send(new ReminderMail($negotiation));
-                
                 $followUp = FollowUp::create([
-                        'negotiation_status_id' => $negotiation->id,
-                        'negotiation_status' => $negotiation->negotiation_status,
-                        'status' => false, 
-                    ]);
+                    'negotiation_status_id' => $negotiation->id,
+                    'negotiation_status' => $negotiation->negotiation_status,
+                    'status' => false,
+                    'follow_up_count' => $followUpCount + 1
+                ]);
 
-                    if ($followUp && Carbon::parse($followUp->created_at)->diffInHours(now()) >= 24 && $followUp->status == false) {
-                        Mail::to($user->email)->send(new FollowUpReminderMail($followUp,$negotiation));
-                    }
-
-                if (Carbon::parse($negotiation->updated_at)->diffInDays(now()) >= 7) {
-                    $negotiation->update([
-                        'negotiation_sub_status' => 'Loss',
-                    ]);
+                if ($followUp->created_at->diffInDays(now()) >= 1 && !$followUp->status) {
+                    Mail::to($user->email)->send(new FollowUpReminderMail($followUp, $negotiation));
                 }
+            } elseif ($followUpCount >= 7) {
+                $negotiation->update(['negotiation_sub_status' => 'Loss']);
             }
         }
     }
-}    
+} 
+
+
+
+
