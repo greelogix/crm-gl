@@ -17,7 +17,7 @@ class CheckNegotiationStatus extends Command
     protected $signature = 'app:check-status';
     protected $description = 'Check negotiation statuses and send reminders';
 
-    public function handle()
+   public function handle()
     {
         $negotiations = NegotiationStatus::with(['user', 'lead'])
             ->whereNull('negotiation_sub_status')
@@ -25,28 +25,16 @@ class CheckNegotiationStatus extends Command
             ->get();
 
         foreach ($negotiations as $negotiation) {
-            if (in_array($negotiation->negotiation_sub_status, ['Won', 'Loss'])) {
-                continue;
-            }
-
             $user = $negotiation->user;
-            $lastFollowUp = FollowUp::where('negotiation_status_id', $negotiation->id)
-                ->latest('created_at')
-                ->first();
-
-            $followUpCount = ($lastFollowUp && ($lastFollowUp->negotiation_status === $negotiation->negotiation_status && $lastFollowUp->negotiation_sub_status === $negotiation->negotiation_sub_status))
-                ? FollowUp::where('negotiation_status_id', $negotiation->id)
-                    ->where('negotiation_status', $negotiation->negotiation_status)
-                    ->count()
-                : 0;
-
+            $followUpCount = FollowUp::where('negotiation_status_id', $negotiation->id)
+            ->where('negotiation_status', $negotiation->negotiation_status)
+            ->count();
             if ($followUpCount < 7) {
                 Mail::to($user->email)->send(new ReminderMail($negotiation));
                 $followUp = FollowUp::create([
                     'negotiation_status_id' => $negotiation->id,
                     'negotiation_status' => $negotiation->negotiation_status,
                     'status' => false,
-                    'follow_up_count' => $followUpCount + 1
                 ]);
 
                 if ($followUp->created_at->diffInDays(now()) >= 1 && !$followUp->status) {
