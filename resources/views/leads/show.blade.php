@@ -88,38 +88,21 @@
                     </div>
                    <div class="col-md-6">
                         <h5 class="font-weight-bold text-lead" style="font-size: 16px;">Follow Up</h5>
-                        @php 
-                            $followUps = $showlead->negotiationstatus->followUps ?? [];
-                            $currentStatus = $showlead->negotiationstatus->negotiation_status;
-                            $filteredFollowUps = collect($followUps)->filter(function($followUp) use ($currentStatus) {
-                                return $followUp->negotiation_status === $currentStatus;
-                            })->groupBy('negotiation_status_id');
-                        @endphp
-                        @if ($filteredFollowUps->isNotEmpty())
-                            @foreach ($filteredFollowUps as $statusId => $followUpsForStatus)
-                                <div class="mb-2">
-                                    <h6 class="font-weight-bold text-primary" style="font-size: 15px;">
-                                        Status: {{ $followUpsForStatus->first()->negotiation_status }}
-                                    </h6>
-                    
-                                    @foreach ($followUpsForStatus as $index => $followUp)
-                                        <div class="mb-3">
-                                            <label class="font-weight-bold" style="font-size: 14px;">Proposal Date</label>
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <p class="mb-0" style="font-size: 14px;">
-                                                    {{ $index + 1 }}. {{ $followUp->negotiation_status }}
-                                                </p>
-                    
-                                                @if ($followUp->status == 0 && Carbon\Carbon::parse($followUp->created_at)->diffInHours(Carbon\Carbon::now()) >= 48)
-                                                    <button class="btn btn-sm btn-outline-danger" style="font-size: 12px;width: 95px;">Incomplete</button>
-                                                @elseif($followUp->status == 0)
-                                                    <button class="btn btn-sm btn-outline-primary mark-read-btn" style="font-size: 12px;" data-id="{{ $followUp->id }}">Mark as Read</button>
-                                                @elseif($followUp->status == 1)
-                                                    <button class="btn btn-sm btn-outline-success" style="font-size: 12px; width: 95px;">Complete</button>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    @endforeach
+                        @php $followUps = $showlead->negotiationstatus->followUps ?? [] @endphp
+                        @if (count($followUps) > 0)
+                            @foreach ($followUps as $index => $followUp)
+                                <div class="mb-3">
+                                    <label class="font-weight-bold" style="font-size: 14px;">Proposal Date</label>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <p class="mb-0" style="font-size: 14px;">{{ $index + 1 }}. {{ $followUp->negotiation_status }}</p>
+                                        @if ($followUp->status == 0 && Carbon\Carbon::parse($followUp->created_at)->diffInHours(Carbon\Carbon::now()) >= 48)
+                                            <button class="btn btn-sm btn-outline-danger" style="font-size: 12px;width: 95px;">Incomplete</button>
+                                        @elseif($followUp->status == 0)
+                                            <button class="btn btn-sm btn-outline-primary mark-read-btn" style="font-size: 12px;" data-id="{{ $followUp->id }}">Mark as Read</button>
+                                        @elseif($followUp->status == 1)
+                                            <button class="btn btn-sm btn-outline-success" style="font-size: 12px; width: 95px;">Complete</button>
+                                        @endif
+                                    </div>
                                 </div>
                             @endforeach
                         @else
