@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('negotiation_status_id')->constrained('negotiations_status')->onDelete('cascade');
             $table->string('negotiation_status');
             $table->string('status')->default(false);
+            $table->integer('follow_up_count')->default(0);
             $table->timestamps();
         });
     }
