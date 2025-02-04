@@ -15,10 +15,10 @@ class ConnectController extends Controller
         $user = Auth::user();
         if($user->role === 'admin'){
             $connects = Connect::with('user')->orderBy('date', 'asc')->get();
-            $leads = Lead::where('status', '1')->get();
+            $leads = Lead::all();
         } else {
             $connects = Connect::where('user_id', $user->id)->orderBy('date', 'asc')->get();
-            $leads = Lead::where('user_id', $user->id)->where('status', '1')->get();
+            $leads = Lead::where('user_id', $user->id)->get();
         }
     
         $groupedByWeekConnects = $connects->groupBy(function ($item) {
