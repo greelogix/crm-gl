@@ -12,6 +12,7 @@ class FollowUp extends Model
         'negotiation_status_id', 
         'negotiation_status',
         'status',
+        'follow_up_count',
     ];
 
     public function negotiationstatus()
