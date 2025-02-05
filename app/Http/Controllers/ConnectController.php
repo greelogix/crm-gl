@@ -37,7 +37,7 @@ class ConnectController extends Controller
             $totalBuy = $connects->sum('connects_buy');
             $totalSpent = isset($groupedByWeekLeads[$week]) ? $groupedByWeekLeads[$week]->filter(fn($lead) => is_numeric($lead['connects_spent']))->sum('connects_spent'): 0;
 
-            $remainingConnects = $totalBuy - $totalSpent + $carryForward;
+           $remainingConnects = max(0, $totalBuy - $totalSpent + $carryForward);
 
             $weeklyData[$week] = [
                 'total_buy' => $totalBuy,
