@@ -188,11 +188,13 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="proposal_date" style="font-size: small;">Proposal Date</label>
-                        <input type="date" class="form-control required shadow-none @error('proposal_date') is-invalid @enderror" id="proposal_date" name="proposal_date" value="{{ old('proposal_date') }}">
+                        <input type="date" class="form-control required shadow-none @error('proposal_date') is-invalid @enderror" 
+                               id="proposal_date" name="proposal_date" value="{{ old('proposal_date') }}" 
+                               max="{{ \Carbon\Carbon::today()->toDateString() }}">
                         @error('proposal_date')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                    </div>
+                    </div>     
                 </div>
                 <div class="text-end">
                     <button type="submit" id="btn-submit" class="btn btn-purple btn-block shadow-none" style="font-size: small;">Create Propsoal</button>
