@@ -92,7 +92,7 @@
                         @if (count($followUps) > 0)
                             @foreach ($followUps as $index => $followUp)
                                 <div class="mb-3">
-                                    <label class="font-weight-bold" style="font-size: 14px;">Proposal Date</label>
+                                   <label class="font-weight-bold" style="font-size: 14px;">Proposal Date ({{ \Carbon\Carbon::parse($followUp->created_at)->format('Y-m-d') }})</label>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <p class="mb-0" style="font-size: 14px;">{{ $index + 1 }}. {{ $followUp->negotiation_status }}</p>
                                         @if ($followUp->status == 0 && Carbon\Carbon::parse($followUp->created_at)->diffInHours(Carbon\Carbon::now()) >= 48)
