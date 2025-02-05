@@ -70,8 +70,14 @@ class LeadController extends Controller
      */
     public function store(LeadRequest $request)
      {
-        Lead::create($request->validated());
-        return redirect()->route('leads.index')->with('success', 'Proposal created successfully!');
+        $validatedData = $request->validated();
+    
+        if ($validatedData) {
+            Lead::create($validatedData);
+            return redirect()->route('leads.index')->with('success', 'Proposal created successfully!');
+        } else {
+            return back()->with('error', 'Validation Error!');
+        }
     }
         
 
