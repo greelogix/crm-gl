@@ -31,6 +31,7 @@ class ConnectController extends Controller
         
         $weeklyData = [];
         $carryForward = 0;
+        $remainingConnects = 0;
     
         foreach ($groupedByWeekConnects as $week => $connects) {
             $totalBuy = $connects->sum('connects_buy');
