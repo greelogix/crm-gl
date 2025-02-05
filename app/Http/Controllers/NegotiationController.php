@@ -25,7 +25,7 @@ class NegotiationController extends Controller
             ['user_id' => $user_id, 'lead_id' => $request->lead_id],
             [
                 'negotiation_status' => $request->negotiation_status,
-                'negotiation_sub_status' => null,
+                'negotiation_sub_status' => $request->negotiation_sub_status ?? null,
                 'updated_at' => now(),
             ]
         );
