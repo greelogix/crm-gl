@@ -63,7 +63,7 @@
                         <th>Price</th>
                         <th>Connects</th>
                         {{-- <th>Connects Use</th> --}}
-                        <th>Action</th>
+<!--                         <th>Action</th> -->
                     </tr>
                     {{-- @foreach ($connects->groupBy('date') as $date => $dailyConnects)
                     @php
@@ -115,7 +115,7 @@
                             @endphp
                             {{ $dailyLeadsFiltered->sum('connects_spent') }}
                         </td> --}}
-                        <td class="action-icons">
+<!--                         <td class="action-icons">
                             <a href="{{ route('connect.destroy', $connect->id) }}" data-bs-toggle="tooltip" title="Delete" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $connect->id }}').submit();">
                                 <i class="fa-regular fa-trash-can" style="font-size: medium;"></i>
                             </a>
@@ -129,7 +129,7 @@
                                @method('DELETE') 
                             </form>
                         </td>
-                        
+                         -->
                     </tr>
                 @endforeach
                 </tbody>
