@@ -47,7 +47,7 @@ class ConnectController extends Controller
             $carryForward = $weeklyData[$week]['carry_forward'];
         }
 
-        return view('connect.index', compact('groupedByWeekConnects', 'groupedByWeekLeads', 'connects' ,'weeklyData'));
+        return view('connect.index', compact('groupedByWeekConnects', 'groupedByWeekLeads', 'connects' ,'weeklyData','remainingConnects'));
     }
 
     public function store(Request $request){
