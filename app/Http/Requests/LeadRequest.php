@@ -23,15 +23,28 @@ class LeadRequest extends FormRequest
     {
             return [
                 'user_id' =>'required',
-                'client_name' => 'required|string',
-                'tech_stack' => 'required|string',
-                'connects_spent' => 'required|string',
+                'client_name' => 'required|regex:/^[a-zA-Z]+$/',
+                'tech_stack' => 'required|string|regex:/^[a-zA-Z\s]+$/',
+                'connects_spent' => 'required|integer',
                 'rate_type' => 'required|string',
-                'rate_value' => 'required|numeric',
-                'proposal_name' => 'required|string',
+                'rate_value' => 'required|integer',
+                'proposal_name' => 'required|string|regex:/^[a-zA-Z\s]+$/',
                 'proposal_link' => 'required|string',
                 'country' => 'required|string',
                 'proposal_date' => 'required|date',
             ];
+    }
+
+     /**
+     * Get custom validation messages.
+     *
+     * @return array
+     */
+    public function messages(): array
+    {
+        return [
+            'client_name.required' => 'Client name is required.',
+            'client_name.regex' => 'Client name should only contain alphabets.',
+        ];
     }
 }
