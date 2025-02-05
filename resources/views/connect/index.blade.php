@@ -4,7 +4,7 @@
 @section('content')
 <div class="mb-5 pb-3 d-flex justify-content-between position-relative" style="top: 35px;">
     <div class="">
-        <h5 class="" style="font-size: large;">Available Connects : {{$remainingConnects)}}</h5>
+        <h5 class="" style="font-size: large;">Available Connects : {{$remainingConnects}}</h5>
     </div>
     <div>
         <button class="btn btn-purple add-cuctomer create-connect shadow-none"  data-bs-toggle="modal" data-bs-target="#ConnectModal" style="font-size: small;">Add Connects</button>
