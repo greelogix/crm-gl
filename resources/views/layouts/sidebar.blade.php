@@ -13,12 +13,22 @@
                     <span class="sidebar-text"> Proposal</span>
                 </a>
             </li>
+            @if(Auth::user()->role == 'user')
             <li>
                 <a href="{{ route('connect.index') }}" class="d-block px-4 py-2 rounded text-white text-decoration-none hover-bg-dark hover-text-primary d-flex align-items-center">
                     <i class="fas fa-link me-3"></i> 
                     <span class="sidebar-text"> Connects</span> 
                 </a>
             </li>
+            @endif
+            @if(Auth::user()->role == 'admin')
+            <li>
+                <a href="{{ route('user.connect') }}" class="d-block px-4 py-2 rounded text-white text-decoration-none hover-bg-dark hover-text-primary d-flex align-items-center">
+                    <i class="fas fa-link me-3"></i> 
+                    <span class="sidebar-text"> Connects</span> 
+                </a>
+            </li>
+            @endif
             @if(Auth::user()->role == 'admin')
             <li>
                 <a href="{{ route('user.index') }}" class="d-block px-4 py-2 rounded text-white text-decoration-none hover-bg-dark hover-text-primary d-flex align-items-center">
