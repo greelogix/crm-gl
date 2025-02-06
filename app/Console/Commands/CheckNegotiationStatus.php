@@ -21,7 +21,7 @@ class CheckNegotiationStatus extends Command
     {
         $negotiations = NegotiationStatus::with(['user', 'lead'])
             ->whereNull('negotiation_sub_status')
-            ->where('updated_at', '<=', now()->subMinute(3))
+            ->where('updated_at', '<=', now()->subDay(2))
             ->get();
 
         foreach ($negotiations as $negotiation) {
