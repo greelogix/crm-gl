@@ -51,6 +51,46 @@ class ConnectController extends Controller
         return view('connect.index', compact('groupedByWeekConnects', 'groupedByWeekLeads', 'connects' ,'weeklyData','remainingConnects'));
     }
 
+     public function Userindex()
+    {
+        $user = Auth::user();
+    
+        $connects = Connect::with('user')
+            ->orderBy('user_id', 'asc')
+            ->orderBy('date', 'desc')
+            ->get()
+            ->groupBy(function ($item) {
+                return $item->user_id . '-' . $item->date;
+            })->map(function ($groupedItems) {
+                return (object) [
+                    'user' => $groupedItems->first()->user,
+                    'user_id' => $groupedItems->first()->user_id,
+                    'date' => $groupedItems->first()->date,
+                    'connects_buy' => $groupedItems->sum('connects_buy'),
+                    'connects_spent' => $groupedItems->sum('connects_spent'),
+                    'price' => $groupedItems->sum('price'),
+                ];
+            });
+    
+        $leads = Lead::all();
+        $remainingConnects = [];
+    
+        foreach ($connects as $connect) {
+            $totalBuy = $connect->connects_buy;
+            $totalSpent = $leads
+                ->where('user_id', $connect->user_id)
+                ->whereBetween('created_at', [
+                    \Carbon\Carbon::parse($connect->date)->startOfDay(),
+                    \Carbon\Carbon::parse($connect->date)->endOfDay()
+                ])
+                ->sum('connects_spent');
+    
+            $remainingConnects[$connect->user_id][$connect->date] = max(0, $totalBuy - $totalSpent);
+        }
+    
+        return view('connect.users_connect', compact('connects', 'leads', 'remainingConnects', 'user'));
+    }
+
     public function store(Request $request){
       
         $userid = Auth::id();
