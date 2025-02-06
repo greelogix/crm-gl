@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-2 mt-5 mt-sm-3 mb-sm-4  d-flex justify-content-between position-relative">
+<div class="mb-2 mt-5 mt-sm-3 mb-sm-4 d-flex justify-content-between position-relative head-text" style="white-space: nowrap;">
     <div class="">
         <h5 class="" style="font-size: large;">Customer List</h5>
     </div>
@@ -12,13 +12,13 @@
 <div class="container d-flex justify-content-end perposal-main gap-2 p-2 bg-light position-relative" style="top: 20px;">
     <form method="GET" action="{{ route('leads.index') }}" id="filterForm" class="d-flex gap-2">
         @csrf
-        <span style="position: absolute;bottom: 35px;font-size: smaller;">Start date</span> <input 
+        <span style="position: absolute;bottom: 35px;font-size: smaller; white-space: nowrap;">Start date</span> <input 
         type="date" 
         name="start_date" id="start_date"
         value="{{ request('start_date') }}" 
         class="form-control form-control-sm shadow-none" 
         onchange="document.getElementById('filterForm').submit();">
-        <span style="    position: absolute;right: 428px;bottom: 35px;font-size: smaller;">End date</span> <input 
+        <span class="end-date" style="position: absolute;right: 428px;bottom: 35px;font-size: smaller; white-space: nowrap;">End date</span> <input 
             type="date" 
             name="end_date" id="end_date"
             value="{{ request('end_date') }}" 
@@ -50,7 +50,7 @@
             {{-- <th><input type="checkbox" id="select-all"></th> --}}
             <th >#</th>
             <th>Client Name</th>
-             <th>User Name</th>
+            <th>User Name</th>
             <th>Tech Stack</th>
             <th>Connects Spent</th>
             <th>Status</th>
@@ -87,6 +87,7 @@
                     @csrf
                    @method('DELETE') 
                 </form>
+                <input type="hidden" id="modalStatus" value="{{ request()->get('modal') }}">
 
                 <a href="{{ route('leads.show', $lead->id) }}" class="cursor-pointer ms-1 generate-lead" data-bs-toggle="tooltip" title="Generate Lead">
                     @if ($lead->status == 0)
@@ -153,7 +154,7 @@
 
                         <div class="form-group col-md-6 rate-input" id="rate_input_field" style="display: none;">
                             <label for="rate_value" style="font-size: small;">Enter Rate</label>
-                            <input type="number" class="form-control required shadow-none @error('rate_value') is-invalid @enderror" id="rate_value" name="rate_value" value="{{ old('rate_value') }}">
+                            <input type="number" class="form-control required shadow-none @error('rate_value') is-invalid @enderror" id="rate_value" name="rate_value" value="">
                             @error('rate_value')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -194,7 +195,7 @@
                         @error('proposal_date')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                    </div>     
+                    </div>                    
                 </div>
                 <div class="text-end">
                     <button type="submit" id="btn-submit" class="btn btn-purple btn-block shadow-none" style="font-size: small;">Submit</button>
@@ -217,7 +218,6 @@
 </script>
 @endif
 <script>
-<script>
 $(document).ready(function() {
 
     var table = $('#customerTable').DataTable({
@@ -232,7 +232,7 @@ $(document).ready(function() {
     });
 
     $('#customerTable_length select').removeClass('form-select form-select-sm');
-
+   
     $('body').on('submit', '#leadForm', function (e) {
         e.preventDefault();
 
