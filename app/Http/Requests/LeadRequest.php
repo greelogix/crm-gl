@@ -23,7 +23,7 @@ class LeadRequest extends FormRequest
     {
             return [
                 'user_id' =>'required',
-                'client_name' => 'required|regex:/^[a-zA-Z]+$/',
+                'client_name' => 'required|regex:/^[a-zA-Z\s]+$/',
                 'tech_stack' => 'required|string|regex:/^[a-zA-Z\s]+$/',
                 'connects_spent' => 'required|integer',
                 'rate_type' => 'required|string',
