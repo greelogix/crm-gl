@@ -28,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/negotiation/update-sub-status', [NegotiationController::class, 'updateSubStatus'])->name('negotiation.updateSubStatus');
     Route::put('/follow-up/{id}/mark-read', [NegotiationController::class, 'markAsRead']);
     Route::resource('connect', ConnectController::class);    
+    Route::get('user_connect', [ConnectController::class, 'Userindex'])->name('user.connect');
 
 });
 
