@@ -197,7 +197,7 @@
                     </div>     
                 </div>
                 <div class="text-end">
-                    <button type="submit" id="btn-submit" class="btn btn-purple btn-block shadow-none" style="font-size: small;">Create Propsoal</button>
+                    <button type="submit" id="btn-submit" class="btn btn-purple btn-block shadow-none" style="font-size: small;">Submit</button>
                 </div>
             </form>
             
@@ -208,6 +208,15 @@
 
 @endsection
 @push('scripts')
+@if ($errors->any())
+<script>
+    document.addEventListener("DOMContentLoaded", function(e) {
+        e.preventDefault();
+        $('#LeadModal').modal('show');
+    });
+</script>
+@endif
+<script>
 <script>
 $(document).ready(function() {
 
