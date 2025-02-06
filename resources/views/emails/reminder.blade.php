@@ -7,9 +7,9 @@
     <title>Reminder</title>
 </head>
 <body>
-    <p>Hello,{{$negotiation->user->name}}</p>
-    <p>This is a reminder to update the negotiation status for the lead: Please update the status of the lead created by you, {{$negotiation->lead->client_name}}.</p>
-    <p>Please update your status before it is automatically marked as 'Loss' after seven days.</p>
+    <p>Hello, {{$negotiation->user->name}}</p>
+    <p>This is a reminder to update the negotiation status for the lead: <strong>{{$negotiation->lead->proposal_name}}</strong> (Follow-up {{$followUpCount}}). Please make sure to update the status for the lead created by you, <strong>{{$negotiation->lead->client_name}}</strong>.</p>
+    <p>If no update is made, the status will automatically be marked as 'Loss' after seven days.</p>
     <p>Thank you!</p>
 </body>
 </html>
