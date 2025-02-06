@@ -69,15 +69,10 @@ class LeadController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(LeadRequest $request)
-     {
-        $validatedData = $request->validated();
-    
-        if ($validatedData) {
+    {
+            $validatedData = $request->validated();
             Lead::create($validatedData);
-            return redirect()->route('leads.index')->with('success', 'Proposal created successfully!');
-        } else {
-            return back()->with('error', 'Validation Error!');
-        }
+            return redirect()->route('leads.index')->with('success', 'Proposal created successfully!');   
     }
         
 
