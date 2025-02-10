@@ -187,15 +187,21 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    $startOfWeek = \Carbon\Carbon::now()->startOfWeek()->format('Y-m-d'); 
+                    $endOfWeek = \Carbon\Carbon::now()->endOfWeek()->format('Y-m-d');
+                    $today = \Carbon\Carbon::now()->format('Y-m-d');
+                    @endphp
                     <div class="form-group col-md-6">
                         <label for="proposal_date" style="font-size: small;">Proposal Date</label>
                         <input type="date" class="form-control required shadow-none @error('proposal_date') is-invalid @enderror" 
-                               id="proposal_date" name="proposal_date" value="{{ old('proposal_date') }}" 
-                               max="{{ \Carbon\Carbon::today()->toDateString() }}">
+                               id="proposal_date" name="proposal_date" 
+                               value="{{ old('proposal_date', $today) }}" 
+                               min="{{ $startOfWeek }}" 
+                               max="{{ $endOfWeek }}">>
                         @error('proposal_date')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                    </div>                    
+                    </div>                     
                 </div>
                 <div class="text-end">
                     <button type="submit" id="btn-submit" class="btn btn-purple btn-block shadow-none" style="font-size: small;">Submit</button>
