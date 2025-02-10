@@ -187,6 +187,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    @php
                     $startOfWeek = \Carbon\Carbon::now()->startOfWeek()->format('Y-m-d'); 
                     $endOfWeek = \Carbon\Carbon::now()->endOfWeek()->format('Y-m-d');
                     $today = \Carbon\Carbon::now()->format('Y-m-d');
