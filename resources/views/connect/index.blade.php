@@ -20,7 +20,7 @@
             <th></th>
             <th>Sr.</th>
             <th>Name</th>
-            <th>Weak Date</th>
+            <th>Week Date</th>
             <th>Total Price</th>
             <th>Total Connects</th>
             <th>Total Use Connects</th>
@@ -55,16 +55,16 @@
                     </button>
                 </td>
                 <tbody id="collapseweek-{{ Str::slug($week) }}" class="collapse">
-                    <tr style="font-size: small; background-color: #f8f9fa;">
+<!--                     <tr style="font-size: small; background-color: #f8f9fa;">
                         <th></th>
                         <th>Sr.</th>
                         <th>Name</th>
                         <th>Date</th>
                         <th>Price</th>
-                        <th>Connects</th>
+                        <th>Connects</th> -->
                         {{-- <th>Connects Use</th> --}}
 <!--                         <th>Action</th> -->
-                    </tr>
+<!--                     </tr> -->
                     {{-- @foreach ($connects->groupBy('date') as $date => $dailyConnects)
                     @php
                         $dailyConnectsByUser = $dailyConnects->groupBy('user_id');
@@ -161,13 +161,23 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="date" style="font-size: small;">Date</label>
-                                <input type="date" class="form-control shadow-none required @error('date') is-invalid @enderror" id="date" name="date" value="{{ old('date', \Carbon\Carbon::now()->format('Y-m-d')) }}">
-                                @error('proposal_date')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                           @php
+                            $startOfWeek = \Carbon\Carbon::now()->startOfWeek()->format('Y-m-d'); 
+                            $endOfWeek = \Carbon\Carbon::now()->endOfWeek()->format('Y-m-d');
+                            $today = \Carbon\Carbon::now()->format('Y-m-d');
+                            @endphp
+
+                        <div class="form-group col-md-6">
+                            <label for="date" style="font-size: small;">Date</label>
+                            <input type="date" class="form-control shadow-none required @error('date') is-invalid @enderror" 
+                                id="date" name="date" 
+                                value="{{ old('date', $today) }}" 
+                                min="{{ $startOfWeek }}" 
+                                max="{{ $endOfWeek }}">
+                            @error('date')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                         </div>
 
                         <div class="row mb-3">
