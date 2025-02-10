@@ -154,7 +154,7 @@
 
                         <div class="form-group col-md-6 rate-input" id="rate_input_field" style="display: none;">
                             <label for="rate_value" style="font-size: small;">Enter Rate</label>
-                            <input type="number" class="form-control required shadow-none @error('rate_value') is-invalid @enderror" id="rate_value" name="rate_value" value="">
+                            <input type="number" class="form-control required shadow-none @error('rate_value') is-invalid @enderror" id="rate_value" name="rate_value" value="" min="1">
                             @error('rate_value')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
