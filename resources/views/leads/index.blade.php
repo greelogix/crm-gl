@@ -198,7 +198,7 @@
                                id="proposal_date" name="proposal_date" 
                                value="{{ old('proposal_date', $today) }}" 
                                min="{{ $startOfWeek }}" 
-                               max="{{ $endOfWeek }}">>
+                               max="{{ $endOfWeek }}">
                         @error('proposal_date')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
