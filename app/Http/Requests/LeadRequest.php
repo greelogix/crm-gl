@@ -23,12 +23,12 @@ class LeadRequest extends FormRequest
     {
             return [
                 'user_id' =>'required',
-                'client_name' => 'required|regex:/^[a-zA-Z\s]+$/',
-                'tech_stack' => 'required|string|regex:/^[a-zA-Z\s]+$/',
+                'client_name' => 'required|string',
+                'tech_stack' => 'required|string',
                 'connects_spent' => 'required|integer',
                 'rate_type' => 'required|string',
                 'rate_value' => 'required|integer',
-                'proposal_name' => 'required|string|regex:/^[a-zA-Z\s]+$/',
+                'proposal_name' => 'required|string',
                 'proposal_link' => 'required|string',
                 'country' => 'required|string',
                 'proposal_date' => 'required|date',
